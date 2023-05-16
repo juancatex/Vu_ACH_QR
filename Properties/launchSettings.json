@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "Vu_ACH_QR": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
