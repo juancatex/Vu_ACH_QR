@@ -1,25 +1,19 @@
-﻿using RestSharp;
+﻿
 using Seguridad;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates; 
 
 namespace Vu_ACH_QR.clases
 {
     internal class Encript
     {
-         readonly Config_quartz _datain;
-
+         readonly Config_quartz _datain; 
         public Encript(Config_quartz valuein) {
             _datain = valuein;
         }
         public Config_quartz getParameters()
         {
             string sNoSerie = "";
+            Config_quartz outconfig = new Config_quartz();
             switch (_datain.ValCer)
             {  
                 case "Server":
@@ -35,25 +29,50 @@ namespace Vu_ACH_QR.clases
                             }
                         }
                         objStore.Close();
+                    Criptografia criptografia = new Criptografia(_datain.UrlKeys, sNoSerie);
+
+                    outconfig = _datain;
+                    outconfig.Usuario = criptografia.Desencriptar(_datain.Usuario);
+                    outconfig.Password = criptografia.Desencriptar(_datain.Password);
+                    outconfig.UsuarioDOM = criptografia.Desencriptar(_datain.UsuarioDOM);
+                    outconfig.PasswordDOM = criptografia.Desencriptar(_datain.PasswordDOM);
+                    outconfig.PathCer = "";
+                    outconfig.UrlKeys = "";
                     break;
                 case "File":
                         // crear la instance de llamado al certificado instalado en un repositorio
                         byte[] yCert = File.ReadAllBytes(_datain.PathCer);
                         X509Certificate2 oCSD = new X509Certificate2(yCert);
                         sNoSerie = oCSD.SerialNumber.ToString();
-                    break;
-            }
-          
-            Criptografia criptografia = new Criptografia(_datain.UrlKeys, sNoSerie); 
-            Config_quartz outconfig = new Config_quartz();
-            outconfig = _datain;
-            outconfig.Usuario = criptografia.Desencriptar(_datain.Usuario);
-            outconfig.Password = criptografia.Desencriptar(_datain.Password);
-            outconfig.UsuarioDOM = criptografia.Desencriptar(_datain.UsuarioDOM);
-            outconfig.PasswordDOM = criptografia.Desencriptar(_datain.PasswordDOM); 
-            outconfig.PathCer = "";
-            outconfig.UrlKeys = "";
+                    Criptografia criptografiaf = new Criptografia(_datain.UrlKeys, sNoSerie);
 
+                    outconfig = _datain;
+                    outconfig.Usuario = criptografiaf.Desencriptar(_datain.Usuario);
+                    outconfig.Password = criptografiaf.Desencriptar(_datain.Password);
+                    outconfig.UsuarioDOM = criptografiaf.Desencriptar(_datain.UsuarioDOM);
+                    outconfig.PasswordDOM = criptografiaf.Desencriptar(_datain.PasswordDOM);
+                    outconfig.PathCer = "";
+                    outconfig.UrlKeys = "";
+                    break;
+                case "Line":
+                    // crear la instance de llamado al certificado fisico ()obtenido desde el dll
+                    byte[] yCertoff = File.ReadAllBytes(_datain.PathCer);
+                    X509Certificate2 oCSDoff = new X509Certificate2(yCertoff);
+                    sNoSerie = oCSDoff.SerialNumber.ToString();
+                    Cripto Cripto = new Cripto(_datain.UrlKeys, sNoSerie);
+
+                    outconfig = _datain;
+                    outconfig.Usuario = Cripto.Desencriptar(_datain.Usuario);
+                    outconfig.Password = Cripto.Desencriptar(_datain.Password);
+                    outconfig.UsuarioDOM = Cripto.Desencriptar(_datain.UsuarioDOM);
+                    outconfig.PasswordDOM = Cripto.Desencriptar(_datain.PasswordDOM);
+                    outconfig.PathCer = "";
+                    outconfig.UrlKeys = "";
+                    break;
+                default:
+                    outconfig = _datain;
+                    break;
+            } 
             return outconfig;
         }
     }
