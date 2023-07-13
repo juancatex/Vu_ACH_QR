@@ -75,8 +75,8 @@ namespace Vu_ACH_QR
                 }
             } else
             {
-                _logger.LogInformation("--{0}--------------------{1}", response.Content, DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")); 
-                _reglog.GrabaLogHora(this._trasaccion + ":" + "Error en la conexión con el Btservice, Code=" + response.StatusCode + " Mensaje=" + response.Content);
+                _logger.LogInformation("--{0}--------------------{1}", response.Content, DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss") + " ErrorMessage=" + response.ErrorMessage); 
+                _reglog.GrabaLogHora(this._trasaccion + ":" + "Error en la conexión con el Btservice, Code=" + response.StatusCode + " Mensaje=" + response.Content + " ErrorMessage=" + response.ErrorMessage);
             }
         }
         
@@ -101,8 +101,8 @@ namespace Vu_ACH_QR
                                 break;
                         }
                     }else{
-                        _logger.LogInformation("--{0}---------tokken----------------{1}-----------Msg:{2}", response.StatusCode, DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"), response.Content);
-                        _reglog.GrabaLogHora(this._trasaccion + ":" + "Error al obtener el TOKEN, Code=" + response.StatusCode + " Mensaje="+ response.Content);
+                        _logger.LogInformation("--{0}---------tokken----------------{1}-----------Msg:{2}", response.StatusCode, DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"), response.Content + " ErrorMessage=" + response.ErrorMessage);
+                        _reglog.GrabaLogHora(this._trasaccion + ":" + "Error al obtener el TOKEN, Code=" + response.StatusCode + " Mensaje="+ response.Content + " ErrorMessage=" + response.ErrorMessage);
                     }
             }catch (Exception e){
                 _logger.LogInformation("-----btservices error----------------{0}-----------Msg:{1}" , DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"), e.Message); 

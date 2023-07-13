@@ -23,14 +23,20 @@ namespace Vu_ACH_QR.clases
             file.Close();
             file.Dispose();
         }
-        public async void GrabaLogHora(string mensaje)
+        public void GrabaLogHora(string mensaje)
         {
+             
                 string path = FullPath + this.NameLog + "-" + DateTime.Now.ToString("yyyyMMdd-HH") + ".txt";
-                StreamWriter file = new StreamWriter(path, true);
-                await file.WriteLineAsync(DateTime.Now.ToString("HHmmss")+":" + mensaje); 
-                file.Flush();
-                file.Close();
-                file.Dispose(); 
+                //StreamWriter file = new StreamWriter(path, true);
+                //await file.WriteLineAsync(DateTime.Now.ToString("HHmmss") + ":" + mensaje);
+                //file.Flush();
+                //file.Close();
+                //file.Dispose(); 
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
+                    writer.Write(DateTime.Now.ToString("HHmmss") + ":" + mensaje);
+                }
+ 
         }
         public async void GrabaLogMinuto(string mensaje)
         { 
